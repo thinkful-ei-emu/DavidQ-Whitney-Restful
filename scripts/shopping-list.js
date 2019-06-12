@@ -109,7 +109,7 @@ const shoppingList = (function(){
       Api.updateItem(id,update).then(obj=>{
         store.findAndUpdate(id,update);
         render();
-      }).catch(e=>alert(e.message));
+      }).catch(e=>handleErrors(e));
       store.findAndToggleChecked(id);
       render();
     });
@@ -121,11 +121,10 @@ const shoppingList = (function(){
       // get the index of the item in store.items
       const id = getItemIdFromElement(event.currentTarget);
       Api.deleteItem(id)
-        .then(resp => resp.json())
         .then(obj => {
           store.findAndDelete(id);
           render();
-        });
+        }).catch(e=>handleErrors(e));
       // render the updated shopping list
       render();
     });
