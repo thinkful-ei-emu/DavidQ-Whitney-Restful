@@ -70,8 +70,8 @@ const shoppingList = (function(){
       Api.createItem(newItemName)
         .then(res => res.json())
         .then((newItem) => {
-          console.log(newItem);
           store.addItem(newItem);
+          render();
         }).catch(e => alert(e.message));
       render();
     });
@@ -86,6 +86,11 @@ const shoppingList = (function(){
   function handleItemCheckClicked() {
     $('.js-shopping-list').on('click', '.js-item-toggle', event => {
       const id = getItemIdFromElement(event.currentTarget);
+      let update = {checked: !store.items.find((i)=>i.id===id).checked};
+      Api.updateItem(id,update).then(res=>res.json()).then(obj=>{
+        store.findAndUpdate(id,update);
+        render();
+      }).catch(e=>alert(e.message));
       store.findAndToggleChecked(id);
       render();
     });
@@ -108,7 +113,13 @@ const shoppingList = (function(){
       event.preventDefault();
       const id = getItemIdFromElement(event.currentTarget);
       const itemName = $(event.currentTarget).find('.shopping-item').val();
-      store.findAndUpdateName(id, itemName);
+      Api.updateItem(id,{name:itemName})
+        .then(res=>res.json())
+        .then(obj=>{
+          console.log(obj.id);
+          store.findAndUpdate(id,{name:itemName});
+          render();
+        });//.catch(e=>alert(e.message));
       store.setItemIsEditing(id, false);
       render();
     });
