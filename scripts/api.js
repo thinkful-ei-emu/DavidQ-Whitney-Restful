@@ -6,9 +6,7 @@ const Api = (function(){
   const itemsURL = URL + 'items';
 
   function getItems(){
-    return fetch(itemsURL)
-      .then(response => response.json())
-      .then(jsonResponse => jsonResponse);
+    return fetch(itemsURL);
   }
 
   function createItem(name) {
@@ -25,9 +23,20 @@ const Api = (function(){
     };
     return fetch(itemsURL, options);
   }
+  function updateItem(id, data){
+    let options ={
+      headers: new Headers({'Content-Type': 'application/json'}),
+      method: 'PATCH',
+      body:JSON.stringify(data)
+    };
+    console.log(itemsURL+'/'+ id);
+    console.log(options.body);
+    return fetch(itemsURL+'/'+ id,options);
+  }
   return{
     getItems,
-    createItem
+    createItem,
+    updateItem,
   };
 
 
