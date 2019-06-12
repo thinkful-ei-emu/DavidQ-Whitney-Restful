@@ -110,7 +110,6 @@ const shoppingList = (function(){
         store.findAndUpdate(id,update);
         render();
       }).catch(e=>handleErrors(e));
-      store.findAndToggleChecked(id);
       render();
     });
   }
