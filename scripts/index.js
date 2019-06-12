@@ -1,5 +1,5 @@
 'use strict';
-/* global shoppingList, store, Item */
+/* global shoppingList, store, Item,Api */
 /* eslint-env jquery */
 // eslint-disable-next-line no-unused-vars
 $(document).ready(function() {
@@ -8,3 +8,5 @@ $(document).ready(function() {
 });
 
 store.items.push(Item.create('apples'));
+
+Api.getItems().then(res=>console.log(res));
