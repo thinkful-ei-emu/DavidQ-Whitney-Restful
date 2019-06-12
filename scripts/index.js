@@ -5,8 +5,12 @@
 $(document).ready(function() {
   shoppingList.bindEventListeners();
   shoppingList.render();
+  Api.getItems().then(obj=>{
+    obj.forEach((i)=>store.addItem(i));
+    shoppingList.render();
+  });
+  
 });
 
-store.items.push(Item.create('apples'));
 
-//Api.getItems().then(res=>console.log(res));
+

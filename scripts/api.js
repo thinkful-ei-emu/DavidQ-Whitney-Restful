@@ -6,9 +6,9 @@ const Api = (function(){
   const itemsURL = URL + 'items';
 
   function getItems(){
-    fetch(itemsURL)
+    return fetch(itemsURL)
       .then(response => response.json())
-      .then(jsonResponse => console.log(jsonResponse));
+      .then(jsonResponse => jsonResponse);
   }
 
   function createItem(name) {
