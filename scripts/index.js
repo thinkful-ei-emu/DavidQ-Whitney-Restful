@@ -9,4 +9,4 @@ $(document).ready(function() {
 
 store.items.push(Item.create('apples'));
 
-Api.getItems().then(res=>console.log(res));
+//Api.getItems().then(res=>console.log(res));
