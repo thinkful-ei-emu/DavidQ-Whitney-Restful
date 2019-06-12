@@ -21,7 +21,14 @@ const Api = (function(){
       headers: new Headers(httpHeader),
       body: itemJSONified
     };
-    return fetch(itemsURL, options);
+    return fetch(itemsURL, options).then(res=>{
+      if(res.ok){
+        return res.json();
+      }else{
+        console.log(res);
+        return Promise.reject(new Error(res.statusText));
+      }
+    });
   }
   function updateItem(id, data){
     let options ={
@@ -31,14 +38,26 @@ const Api = (function(){
     };
     console.log(itemsURL+'/'+ id);
     console.log(options.body);
-    return fetch(itemsURL+'/'+ id,options);
+    return fetch(itemsURL+'/'+ id,options).then(res=>{
+      if(res.ok){
+        return res.json();
+      }else{
+        return Promise.reject(new Error(res.statusText));
+      }
+    });
   }
   function deleteItem(id) {
     let options = {
       headers: new Headers({'Content-Type':'application/json'}),
       method: 'DELETE'
     };
-    return fetch(itemsURL+'/'+id, options);
+    return fetch(itemsURL+'/'+id, options).then(res=>{
+      if(res.ok){
+        return res.json();
+      }else{
+        return Promise.reject(new Error(res.statusText));
+      }
+    });
   }
   return{
     getItems,

@@ -4,6 +4,19 @@
 // eslint-disable-next-line no-unused-vars
 const shoppingList = (function(){
 
+  function exitError(){
+    $('.js-error>button').click((e)=>{
+      $('.js-error').addClass('hidden');
+    });
+  }
+  function handleErrors(err){
+    store.error=
+      `<h2>${err.message} Error</h2>
+      <p> The Server responed with a ${err.message}. Please Check your internet connecetion</p>
+      `;
+    render();
+  }
+
   function generateItemElement(item) {
     const checkedClass = item.checked ? 'shopping-item__checked' : '';
     const editBtnStatus = item.checked ? 'disabled' : '';
@@ -52,6 +65,13 @@ const shoppingList = (function(){
     if (store.searchTerm) {
       items = items.filter(item => item.name.includes(store.searchTerm));
     }
+    if(store.error){
+      $('.js-error').removeClass('hidden');
+      $('.js-error-message').html(store.error);
+      store.error=null;
+    }else{
+      $('.js-error').addClass('hidden');
+    }
   
     // render the shopping list in the DOM
     console.log('`render` ran');
@@ -68,11 +88,10 @@ const shoppingList = (function(){
       const newItemName = $('.js-shopping-list-entry').val();
       $('.js-shopping-list-entry').val('');
       Api.createItem(newItemName)
-        .then(res => res.json())
         .then((newItem) => {
           store.addItem(newItem);
           render();
-        }).catch(e => alert(e.message));
+        }).catch(e => handleErrors(e));
       render();
     });
   }
@@ -87,7 +106,7 @@ const shoppingList = (function(){
     $('.js-shopping-list').on('click', '.js-item-toggle', event => {
       const id = getItemIdFromElement(event.currentTarget);
       let update = {checked: !store.items.find((i)=>i.id===id).checked};
-      Api.updateItem(id,update).then(res=>res.json()).then(obj=>{
+      Api.updateItem(id,update).then(obj=>{
         store.findAndUpdate(id,update);
         render();
       }).catch(e=>alert(e.message));
@@ -160,6 +179,7 @@ const shoppingList = (function(){
     handleToggleFilterClick();
     handleShoppingListSearch();
     handleItemStartEditing();
+    exitError();
   }
 
   // This object contains the only exposed methods from this module:

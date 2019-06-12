@@ -21,6 +21,17 @@ button:hover:disabled {
 .hidden {
   display: none;
 }
+.js-error{
+  border: 2px solid red;
+  float:right;
+  color:red;
+  width:23%;
+  height:150px;
+}
+.js-error>button{
+  float:right;
+  background-color: white;
+}
 
 #shopping-list-item {
   width: 250px;
