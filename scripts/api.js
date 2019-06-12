@@ -33,10 +33,18 @@ const Api = (function(){
     console.log(options.body);
     return fetch(itemsURL+'/'+ id,options);
   }
+  function deleteItem(id) {
+    let options = {
+      headers: new Headers({'Content-Type':'application/json'}),
+      method: 'DELETE'
+    };
+    return fetch(itemsURL+'/'+id, options);
+  }
   return{
     getItems,
     createItem,
     updateItem,
+    deleteItem
   };
 
 
