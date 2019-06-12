@@ -5,6 +5,26 @@ const Api = (function(){
   const URL = 'https://thinkful-list-api.herokuapp.com/DavidQueen/';
   const itemsURL = URL + 'items';
 
+  function handleFetch(method, body, id=null) {
+    let destinationURL = itemsURL;
+    let options = {
+      headers: new Headers({'Content-Type': 'application/json'}),
+      method: method,
+      body: JSON.stringify(body)
+    };
+    if(id) {
+      destinationURL += '/'+id;
+    }
+    //console.log(options.body);
+    return fetch(destinationURL, options)
+      .then(res => {
+        if(res.ok) {
+          return res.json();
+        }else{
+          return Promise.reject(new Error(res.statusText));
+        }
+      });
+  }
   function getItems(){
     return fetch(itemsURL);
   }
@@ -13,51 +33,14 @@ const Api = (function(){
     const newItem = {
       name
     };
-    let itemJSONified = JSON.stringify(newItem);
-
-    const httpHeader = {'Content-Type': 'application/json'};
-    let options = {
-      method: 'POST',
-      headers: new Headers(httpHeader),
-      body: itemJSONified
-    };
-    return fetch(itemsURL, options).then(res=>{
-      if(res.ok){
-        return res.json();
-      }else{
-        console.log(res);
-        return Promise.reject(new Error(res.statusText));
-      }
-    });
+    return handleFetch('POST', newItem);
   }
+
   function updateItem(id, data){
-    let options ={
-      headers: new Headers({'Content-Type': 'application/json'}),
-      method: 'PATCH',
-      body:JSON.stringify(data)
-    };
-    console.log(itemsURL+'/'+ id);
-    console.log(options.body);
-    return fetch(itemsURL+'/'+ id,options).then(res=>{
-      if(res.ok){
-        return res.json();
-      }else{
-        return Promise.reject(new Error(res.statusText));
-      }
-    });
+    return handleFetch('PATCH', data, id);
   }
   function deleteItem(id) {
-    let options = {
-      headers: new Headers({'Content-Type':'application/json'}),
-      method: 'DELETE'
-    };
-    return fetch(itemsURL+'/'+id, options).then(res=>{
-      if(res.ok){
-        return res.json();
-      }else{
-        return Promise.reject(new Error(res.statusText));
-      }
-    });
+    return handleFetch('DELETE',{},id);
   }
   return{
     getItems,
@@ -65,7 +48,4 @@ const Api = (function(){
     updateItem,
     deleteItem
   };
-
-
-
 })();

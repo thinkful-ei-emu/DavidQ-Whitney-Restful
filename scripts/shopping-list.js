@@ -135,7 +135,6 @@ const shoppingList = (function(){
       const id = getItemIdFromElement(event.currentTarget);
       const itemName = $(event.currentTarget).find('.shopping-item').val();
       Api.updateItem(id,{name:itemName})
-        .then(res=>res.json())
         .then(obj=>{
           console.log(obj.id);
           store.findAndUpdate(id,{name:itemName});
